@@ -1,28 +1,43 @@
-﻿using Newtonsoft.Json;
-using System.Xml;
+﻿
 
-public class JsonDataStorage : IDataStorage
+using Newtonsoft.Json;
+
+namespace ContactApp.Storage
 {
-    private const string FilePath = @"E:\\School02\\Identifiers";
-
-    public void SaveInfoNames(InfoNames InfoNames)
+    public class JsonInfoNamesStorage : InfoNamesStorage
     {
-        var InfoNamess = new List<InfoNames>();
-        if (File.Exists(FilePath))
+        private readonly string _filePath;(@"E:\\School02\\Identifiers\names.csv")
+
+        public JsonInfoNamesStorage(string filePath)
         {
-            string existingData = File.ReadAllText(FilePath);
-            InfoNamess = JsonConvert.DeserializeObject<List<InfoNames>>(existingData) ?? new List<InfoNames>();
+            _filePath = filePath;
         }
 
-        InfoNamess.Add(InfoNames);
-        string jsonData = JsonConvert.SerializeObject(InfoNamess, Newtonsoft.Json.Formatting.Indented);
-        try
+        public List<InfoNames> LäsInfoNameser()
         {
-            File.WriteAllText(FilePath, jsonData);
+            if (!File.Exists(_filePath))
+            {
+                return new List<InfoNames>();
+            }
+
+            string json = File.ReadAllText(_filePath);
+            return JsonSerializer.Deserialize<List<InfoNames>>(json);
         }
-        catch (Exception ex)
+
+        public void SparaInfoNameser(List<InfoNames> InfoNameser)
         {
-            Console.WriteLine("An error occurred: " + ex.Message);
+            string json = JsonSerializer.Serialize(InfoNameser);
+            File.WriteAllText(_filePath, json);
+        }
+
+        public object LäsInfoNames()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SparaInfoNames(object infoNames)
+        {
+            throw new NotImplementedException();
         }
     }
 }
