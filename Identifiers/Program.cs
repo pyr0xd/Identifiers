@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ContactApp.Storage;
+using Identifiers.Services;
+using System;
 
 namespace InfoNamesDataStorage
 {
@@ -6,21 +8,10 @@ namespace InfoNamesDataStorage
     {
         static void Main(string[] args)
         {
-            IDataStorage dataStorage = new JsonDataStorage();
+            string filePath = "kontakter.json"; // Ange sökväg till din JSON-fil
+            var storage = new InfoNamesStorage(filePath);
+            var service = new InfoNamesService(storage);
 
-            Console.WriteLine("Enter First Name:");
-            string firstName = Console.ReadLine();
-
-            Console.WriteLine("Enter Last Name:");
-            string lastName = Console.ReadLine();
-
-            Console.WriteLine("Enter Password:");
-            string password = Console.ReadLine();
-
-            InfoNames newInfoNames = new InfoNames(firstName, lastName, password);
-            dataStorage.SaveInfoNames(newInfoNames);
-
-            Console.WriteLine("InfoNames saved successfully.");
         }
     }
 }
